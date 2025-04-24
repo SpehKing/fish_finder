@@ -12,10 +12,17 @@
       </h2>
       <Bar :chart-data="sizeData" :options="chartOptions" />
     </div>
+    <div class="bg-white shadow rounded p-4">
+      <h2 class="text-lg font-semibold mb-2 text-marineBlue">
+        Map
+      </h2>
+      <LeafletMap />
+    </div>
   </div>
 </template>
 
 <script setup>
+import LeafletMap from './LeafletMap.vue';
 import { computed } from "vue";
 import { Bar } from "vue-chartjs";
 import {
