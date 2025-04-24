@@ -22,4 +22,5 @@ const sensors = ref(sensorsData);
 
 <style>
 /* global styles */
+/* global styles */
 </style>
