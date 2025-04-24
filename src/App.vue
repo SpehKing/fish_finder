@@ -1,7 +1,7 @@
 <template>
+  <Navbar />
   <div class="min-h-screen bg-lightMarine p-4">
     <div class="relative">
-      <!--GoogleMapCard class="absolute top-4 right-4" :sensors="sensors" /-->
       <LeafletMap class="absolute top-4 right-4" :sensors="sensors" />
     </div>
     <div class="mt-80">
@@ -10,14 +10,28 @@
   </div>
 </template>
 
-<script setup>
+<script>
 import { ref } from "vue";
 import sensorsData from "./assets/sensors.json";
-import GoogleMapCard from "./components/GoogleMapCard.vue";
 import Dashboard from "./components/Dashboard.vue";
 import LeafletMap from "./components/LeafletMap.vue";
+import Navbar from "./components/Navbar.vue";
 
-const sensors = ref(sensorsData);
+export default {
+  components: {
+    Navbar,
+    Dashboard,
+    LeafletMap
+  },
+  setup() {
+
+
+    const sensors = ref(sensorsData);
+    return {
+      sensors
+    }
+  }
+}
 </script>
 
 <style>
