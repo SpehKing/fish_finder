@@ -17,25 +17,3 @@
 <script setup>
 // No additional logic needed here for now
 </script>
-
-<style>
-/* Add your global styles here or import them */
-nav ul {
-  list-style: none;
-  padding: 0;
-}
-
-nav li {
-  display: inline;
-}
-
-nav a {
-      color: white;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-nav a.router-link-active {
-  text-decoration: underline;
-}
-</style>
