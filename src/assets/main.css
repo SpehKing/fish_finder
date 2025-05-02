@@ -2,15 +2,29 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f9;
+    background-color: #0077b6;
 }
 
+/* Header styles */
 header {
-    background-color: #0077b6;
-    color: white;
+    height: 20vh; /* Limit the height to 1/5 of the screen */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     padding: 1rem;
-    text-align: center;
+    box-sizing: border-box;
+  }
+
+.h1 {
+    color: white;
 }
+
+  /* Logo styles */
+.logo {
+    height: 100%; /* Make the logo fill the header height */
+    max-height: 80%; /* Ensure the logo doesn't exceed 80% of the header height */
+    width: auto; /* Maintain aspect ratio */
+  }
 
 .container {
     display: flex; /* Use flexbox for layout */
@@ -36,6 +50,15 @@ header {
     font-size: 1.2rem; /* Ensure consistent font size */
     text-align: center;
 }
+
+.info-box-about {
+    background-color: #0077b6; /* Same color as the nav bar */
+    color: white; /* White text for contrast */
+    padding: 1rem; /* Add padding inside the box */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow */
+    font-size: 1.2rem; /* Ensure consistent font size */
+  }
 
 /* Add spacing between the boxes */
 .info-section > .info-box {
@@ -71,27 +94,31 @@ header {
     color: #0077b6;
 }
 
-nav ul {
+/* Navigation styles */
+.nav-bar {
     list-style: none;
-    padding: 0;
     display: flex;
-    justify-content: center;
-    gap: 2rem; /* Increased space between links */
+    justify-content: center; /* Center the navigation links */
+    gap: 2rem; /* Space between links */
+    margin: 0;
+    padding: 0;
   }
   
-  nav li {
+  .nav-bar li {
     display: inline;
   }
   
-  nav a {
-        color: black;
+  .nav-bar a {
+    color: white;
     text-decoration: none;
     font-weight: bold;
   }
   
-  nav a.router-link-active {
+  .nav-bar a.router-link-active {
     text-decoration: underline;
   }
+  
+
 
   /* Status indicator styles */
 .status-indicator {
@@ -108,4 +135,17 @@ nav ul {
   
   .status-offline {
     background-color: red;
+  }
+
+
+  /* Image Section */
+.image-container-about {
+    flex-shrink: 0; /* Prevent the image container from shrinking */
+    text-align: center;
+  }
+  
+  .image-container-about img {
+    max-width: 300px; /* Limit the image size */
+    border-radius: 8px; /* Rounded corners */
+    margin: 10px;
   }
