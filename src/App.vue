@@ -15,9 +15,37 @@
       </nav>
     </header>
     <router-view />
+    <!-- TTN LoRa Message Display Test -->
+    <div class="mt-8 p-4 bg-white rounded shadow w-full max-w-md mx-auto">
+      <h2 class="text-lg font-bold mb-2">Latest LoRa Message</h2>
+      <div v-if="message">
+        <pre class="text-xs bg-gray-100 p-2 rounded overflow-x-auto">{{ JSON.stringify(message, null, 2) }}</pre>
+      </div>
+      <div v-else class="text-gray-500">Waiting for message...</div>
+    </div>
   </div>
 </template>
 
 <script setup>
-// No additional logic needed here for now
+import { ref, onMounted } from 'vue'
+
+const message = ref(null)
+
+// Use the public TTN endpoint for fetching data
+const API_URL = 'http://lukamali.com/ttn2value/data/70B3D57ED007083A.json'
+
+async function fetchMessage() {
+  try {
+    const res = await fetch(API_URL)
+    if (!res.ok) throw new Error('Network response was not ok')
+    message.value = await res.json()
+  } catch (e) {
+    message.value = { error: 'Error fetching message.' }
+  }
+}
+
+onMounted(() => {
+  fetchMessage()
+  setInterval(fetchMessage, 5000) // Poll every 5 seconds
+})
 </script>
