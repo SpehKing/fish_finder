@@ -11,7 +11,7 @@ export default {
   name: 'LeafletMap',
   setup() {
     onMounted(() => {
-      const map = L.map('map').setView([51.505, -0.09], 13);
+      const map = L.map('map').setView([46.279644, 13.837924], 13);
 
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,

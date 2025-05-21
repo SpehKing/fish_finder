@@ -15,6 +15,7 @@
       </nav>
     </header>
     <router-view />
+    <LeafletMap v-if="isHomePage" />
     <!-- TTN LoRa Message Display Test -->
     <div class="mt-8 p-4 bg-white rounded shadow w-full max-w-md mx-auto">
       <h2 class="text-lg font-bold mb-2">Latest LoRa Message</h2>
@@ -24,10 +25,17 @@
       <div v-else class="text-gray-500">Waiting for message...</div>
     </div>
   </div>
+  
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import LeafletMap from './components/LeafletMap.vue';
+
+import { ref, onMounted, computed } from 'vue'
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+const isHomePage = computed(() => route.path === '/');
 
 const message = ref(null)
 
