@@ -16,14 +16,6 @@
     </header>
     <router-view />
     <LeafletMap v-if="isHomePage" />
-    <!-- TTN LoRa Message Display Test -->
-    <div class="mt-8 p-4 bg-white rounded shadow w-full max-w-md mx-auto">
-      <h2 class="text-lg font-bold mb-2">Latest LoRa Message</h2>
-      <div v-if="message">
-        <pre class="text-xs bg-gray-100 p-2 rounded overflow-x-auto">{{ JSON.stringify(message, null, 2) }}</pre>
-      </div>
-      <div v-else class="text-gray-500">Waiting for message...</div>
-    </div>
   </div>
   
 </template>
@@ -31,32 +23,35 @@
 <script setup>
 import LeafletMap from './components/LeafletMap.vue';
 
-import { ref, onMounted, computed } from 'vue'
+import { computed } from 'vue'
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
 const isHomePage = computed(() => route.path === '/');
+</script>
 
-const message = ref(null)
-
-// Use the public TTN endpoint for fetching data
-const API_URL = '/.netlify/functions/proxy'
-
-async function fetchMessage() {
-  try {
-    const res = await fetch(API_URL)
-    if (!res.ok) throw new Error('Network response was not ok')
-    message.value = await res.json()
-  } catch (e) {
-    message.value = { error: 'Error fetching message.' }
-  }
+<style>
+.logo {
+  height: 50px;
+  width: auto;
 }
 
-onMounted(() => {
-  fetchMessage()
-  setInterval(fetchMessage, 5000) // Poll every 5 seconds
-  fetch('/.netlify/functions/proxy')
-    .then(response => response.json())
-    .then(data => console.log(data));
-})
-</script>
+.nav-bar {
+  list-style-type: none;
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-bar li {
+  display: inline;
+}
+
+.nav-bar a {
+  color: white;
+  text-decoration: none;
+}
+
+.nav-bar a:hover {
+  text-decoration: underline;
+}
+</style>
