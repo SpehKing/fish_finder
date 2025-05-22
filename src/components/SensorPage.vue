@@ -1,40 +1,81 @@
 <template>
   <div class="container">
-    <!-- Left Section: Information -->
-    <div class="info-section">
-      <div class="info-box">
-        Sensor Status: 
-        <span :class="sensorStatusClass" class="status-indicator"></span>
-        {{ sensorStatus }}
+    <!-- TTN LoRa Message Display Test -->
+    <div class="mt-8 p-4 bg-white rounded shadow w-full max-w-md mx-auto">
+      <h2 class="text-lg font-bold mb-2">Sensor Status</h2>
+      <div class="flex items-center mb-2">
+        <span :class="['status-indicator', isLive ? 'status-live' : 'status-offline']"></span>
+        <span class="ml-2 font-semibold">{{ isLive ? 'Live' : 'Offline' }}</span>
       </div>
-      <div class="info-box">
-        Last Updated: <span id="last-updated">{{ lastUpdated }}</span>
+      <div>
+        <span class="font-bold">Last Message Time:</span>
+        <span>{{ lastMessageTime || 'N/A' }}</span>
       </div>
-      <div class="info-box">
-        Objects Detected in Last 24 Hours: <span id="objects-detected">{{ objectsDetected }}</span>
-      </div>
-    </div>
-
-    <!-- Right Section: Image -->
-    <div class="image-container">
-      <h2>Last Picture Taken</h2>
-      <img id="last-picture" :src="lastPicture" alt="Last Picture Taken" class="rounded">
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, onMounted, computed } from 'vue'
 
-const sensorStatus = ref("Live");
-const lastUpdated = ref("2023-10-01 12:00 PM"); // Placeholder date and time
-// In a real application, this would be dynamically updated
-const lastPicture = ref("images/fish.jpg"); // Placeholder image path
-const objectsDetected = ref("Loading...");
+const message = ref(null)
+const lastMessageTime = ref('')
+const isLive = ref(false)
 
-// Dynamically set the class for the status indicator
-const sensorStatusClass = computed(() =>
-  sensorStatus.value === "Live" ? "status-live" : "status-offline"
-);
+// Use the public TTN endpoint for fetching data
+const API_URL = '/.netlify/functions/proxy'
 
+function parseMessage(msg) {
+  // Extract last message time
+  if (msg && msg.uplink_message && msg.uplink_message.received_at) {
+    lastMessageTime.value = new Date(msg.uplink_message.received_at).toLocaleString()
+    // Consider sensor live if last message within 10 minutes
+    const last = new Date(msg.uplink_message.received_at)
+    const now = new Date()
+    isLive.value = (now - last) < 10 * 60 * 1000
+  } else {
+    lastMessageTime.value = ''
+    isLive.value = false
+  }
+}
+
+async function fetchMessage() {
+  try {
+    const res = await fetch(API_URL)
+    if (!res.ok) throw new Error('Network response was not ok')
+    const data = await res.json()
+    message.value = data
+    parseMessage(data)
+  } catch (e) {
+    message.value = { error: 'Error fetching message.' }
+    lastMessageTime.value = ''
+    isLive.value = false
+  }
+}
+
+onMounted(() => {
+  fetchMessage()
+  setInterval(fetchMessage, 5000) // Poll every 5 seconds
+})
 </script>
+
+<style scoped>
+.container {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+.status-indicator {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+.status-live {
+  background-color: #4caf50;
+}
+.status-offline {
+  background-color: #f44336;
+}
+</style>
