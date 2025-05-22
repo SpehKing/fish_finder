@@ -40,7 +40,7 @@ const isHomePage = computed(() => route.path === '/');
 const message = ref(null)
 
 // Use the public TTN endpoint for fetching data
-const API_URL = 'http://lukamali.com/ttn2value/data/70B3D57ED007083A.json'
+const API_URL = '/.netlify/functions/proxy'
 
 async function fetchMessage() {
   try {
@@ -55,5 +55,8 @@ async function fetchMessage() {
 onMounted(() => {
   fetchMessage()
   setInterval(fetchMessage, 5000) // Poll every 5 seconds
+  fetch('/.netlify/functions/proxy')
+    .then(response => response.json())
+    .then(data => console.log(data));
 })
 </script>
