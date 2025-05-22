@@ -15,7 +15,7 @@
       </nav>
     </header>
     <router-view />
-    <LeafletMap v-if="isHomePage" />
+    <LeafletMap v-if="isHomePage" :latitude="sensorLatitude" :longitude="sensorLongitude"/>
     <!-- TTN LoRa Message Display Test -->
     <div class="mt-8 p-4 bg-white rounded shadow w-full max-w-md mx-auto">
       <h2 class="text-lg font-bold mb-2">Latest LoRa Message</h2>
@@ -37,19 +37,28 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 const isHomePage = computed(() => route.path === '/');
 
-const message = ref(null)
+const message = ref(null);
+const sensorLatitude = ref(null);
+const sensorLongitude = ref(null);
 
 // Use the public TTN endpoint for fetching data
 const API_URL = '/.netlify/functions/proxy'
 
 async function fetchMessage() {
   try {
-    const res = await fetch(API_URL)
-    if (!res.ok) throw new Error('Network response was not ok')
-    message.value = await res.json()
-  } catch (e) {
-    message.value = { error: 'Error fetching message.' }
-  }
+   const res = await fetch(API_URL);
+   if (!res.ok) throw new Error('Network response was not ok');
+   const data = await res.json();
+   message.value = data;
+
+   // Extract latitude and longitude from the message
+   if (data && data.uplink_message && data.uplink_message.rx_metadata && data.uplink_message.rx_metadata[0] && data.uplink_message.rx_metadata[0].location) {
+     sensorLatitude.value = data.uplink_message.rx_metadata[0].location.latitude;
+     sensorLongitude.value = data.uplink_message.rx_metadata[0].location.longitude;
+   }
+ } catch (e) {
+   message.value = { error: 'Error fetching message.' };
+ }
 }
 
 onMounted(() => {

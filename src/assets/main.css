@@ -149,3 +149,20 @@ header {
     border-radius: 8px; /* Rounded corners */
     margin: 10px;
   }
+
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
+
+.leaflet-material-icon {
+  font-size: 36px;
+  color: red; /* Change as needed */
+  text-shadow: 0 0 2px white; /* Optional: adds contrast */
+  line-height: 36px;
+  display: inline-block;
+}
